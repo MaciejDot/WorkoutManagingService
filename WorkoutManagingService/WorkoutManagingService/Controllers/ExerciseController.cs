@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutManagingService.DTO;
 
 namespace WorkoutManagingService.Controllers
 {
@@ -29,35 +31,14 @@ namespace WorkoutManagingService.Controllers
         public async Task Patch() { }
 
         /// <summary>
-        /// search for exercise
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        public async Task Get(string queryExercise, int page) { }
-
-        /// <summary>
-        /// Get exercise by pages
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        public async Task Get(int page) { }
-
-        /// <summary>
         /// Get All Exercises
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
-        public async Task Get() { }
-
-        /// <summary>
-        /// Get All Exercises by category/kind
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        public async Task Get(string kind) { }
+        //[Authorize]
+        public async Task<ActionResult<IEnumerable<ExerciseDTO>>> Get(CancellationToken token) {
+            await Task.CompletedTask;
+            return new List<ExerciseDTO> { new ExerciseDTO { Id = 1, Name = "Planche" } };
+        }
     }
 }
