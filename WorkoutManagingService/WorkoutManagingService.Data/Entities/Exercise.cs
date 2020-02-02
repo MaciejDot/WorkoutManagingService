@@ -9,6 +9,8 @@ namespace WorkoutManagingService.Data.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsHold { get; set; }
+        public int GroupId { get; set; }
+        public GroupOfExercises GroupOfExercises { get; set; }
         public ICollection<ExerciseExecution> ExerciseExecutions { get; set; }
     }
 }

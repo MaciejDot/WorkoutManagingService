@@ -17,6 +17,7 @@ namespace WorkoutManagingService.Data
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<ExerciseExecution> ExerciseExecutions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<GroupOfExercises> GroupOfExercises { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -100,6 +101,10 @@ namespace WorkoutManagingService.Data
                     .HasMaxLength(400);
 
                 entity
+                    .HasIndex(r => r.GroupId)
+                    .HasName("IX_Exercise_GroupId");
+
+                entity
                     .HasMany(r => r.ExerciseExecutions)
                     .WithOne(r => r.Exercise)
                     .HasForeignKey(r => r.ExerciseId)
@@ -112,6 +117,26 @@ namespace WorkoutManagingService.Data
 
             });
 
+            modelBuilder.Entity<GroupOfExercises>(entity =>
+            {
+                entity.ToTable("GroupOfExercise", "Workout");
+
+                entity.HasKey(r => r.Id)
+                    .HasName("PK_GroupOfExercises");
+
+                entity.HasMany(r => r.Exercises)
+                    .WithOne(r => r.GroupOfExercises)
+                    .HasForeignKey(r => r.GroupId)
+                    .HasConstraintName("FK_Exercise_GroupOfExercises")
+                    .IsRequired();
+
+                entity.Property(r => r.Name)
+                    .HasMaxLength(400);
+
+                entity.HasData(new GroupOfExerciseSeed().GroupsOfExercises());
+
+                entity.HasAnnotation("READONLY_ANNOTATION", true);
+            });
         }
     }
 }

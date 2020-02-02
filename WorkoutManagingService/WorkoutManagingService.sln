@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutManagingService", "WorkoutManagingService\WorkoutManagingService.csproj", "{40B45ABE-40F4-4436-AD09-200A519FC0DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutManagingService.Data", "WorkoutManagingService.Data\WorkoutManagingService.Data.csproj", "{6BCDB627-85BB-43C9-A7B1-10F41B4B0B2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutManagingService.Data", "WorkoutManagingService.Data\WorkoutManagingService.Data.csproj", "{6BCDB627-85BB-43C9-A7B1-10F41B4B0B2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1A3F21D8-F6F9-4771-B763-1158E992EC4C}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
