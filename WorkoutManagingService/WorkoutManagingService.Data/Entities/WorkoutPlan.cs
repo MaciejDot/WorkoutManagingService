@@ -4,15 +4,14 @@ using System.Text;
 
 namespace WorkoutManagingService.Data.Entities
 {
-    public class Workout
+    public class WorkoutPlan
     {
         public int Id { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Executed { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<ExerciseExecution> ExerciseExecutions { get; set; }
+        public DateTime Created { get; set; }
+        public ICollection<ExerciseExecutionPlan> ExerciseExecutionPlans { get; set; }
     }
 }

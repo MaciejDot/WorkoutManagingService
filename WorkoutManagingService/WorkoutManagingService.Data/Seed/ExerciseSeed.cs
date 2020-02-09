@@ -645,6 +645,63 @@ namespace WorkoutManagingService.Data.Seed
 
             #endregion
 
+            #region Box Planche
+
+            yield return new Exercise { Id = 6300, Name = "Advanced Tuck Box Planche", IsHold = true, GroupId = 63 };
+            yield return new Exercise { Id = 6301, Name = "Half Lay Box Planche", IsHold = true, GroupId = 63 };
+            yield return new Exercise { Id = 6302, Name = "Full Box Planche", IsHold = true, GroupId = 63 };
+
+            #endregion
+
+            #region Front Lever Raise
+
+            yield return new Exercise { Id = 6400, Name = "Tuck Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6401, Name = "Advanced Tuck Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6402, Name = "Super Advanced Tuck Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6403, Name = "Straddle Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6404, Name = "Full Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6405, Name = "Wide Full Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6406, Name = "Assisted One Arm Front Lever Raise", IsHold = false, GroupId = 64 };
+            yield return new Exercise { Id = 6407, Name = "One Arm Front Lever Raise", IsHold = false, GroupId = 64 };
+
+            #endregion
+
+            #region Box Planche Raises
+
+            yield return new Exercise { Id = 6500, Name = "Advanced Tuck Box Planche Raise", IsHold = false, GroupId = 65 };
+            yield return new Exercise { Id = 6501, Name = "Half Lay Box Planche Raise", IsHold = false, GroupId = 65 };
+            yield return new Exercise { Id = 6502, Name = "Full Box Planche Raise", IsHold = false, GroupId = 65 };
+
+            #endregion
+
+            #region Box Planche Press
+
+            yield return new Exercise { Id = 6600, Name = "Advanced Tuck Box Planche Press Eccentric", IsHold = false, GroupId = 66 };
+            yield return new Exercise { Id = 6601, Name = "Advanced Tuck Box Planche Press", IsHold = false, GroupId = 66 };
+            yield return new Exercise { Id = 6602, Name = "Half Lay Box Planche Press Eccentric", IsHold = false, GroupId = 66 };
+            yield return new Exercise { Id = 6603, Name = "Half Lay Box Planche Press", IsHold = false, GroupId = 66 };
+            yield return new Exercise { Id = 6604, Name = "Full Box Planche Press Eccentric", IsHold = false, GroupId = 66 };
+            yield return new Exercise { Id = 6605, Name = "Full Box Planche Press", IsHold = false, GroupId = 66 };
+
+            #endregion
+
+            #region Reverse Leg Raises
+
+            yield return new Exercise { Id = 6700, Name = "Box Revrse Leg Raises (Hips on Box)", IsHold = false, GroupId = 67 };
+            yield return new Exercise { Id = 6701, Name = "Box Revrse Leg Raises (Stomach on Box)", IsHold = false, GroupId = 67 };
+            yield return new Exercise { Id = 6702, Name = "Box Revrse Leg Raises (Only Chest on Box)", IsHold = false, GroupId = 67 };
+
+            #endregion
+
+            #region Reverse Leg Raises Hold
+
+            yield return new Exercise { Id = 6800, Name = "Box Revrse Leg Raises (Hips on Box) Hold", IsHold = true, GroupId = 68 };
+            yield return new Exercise { Id = 6801, Name = "Box Revrse Leg Raises (Stomach on Box) Hold", IsHold = true, GroupId = 68 };
+            yield return new Exercise { Id = 6802, Name = "Box Revrse Leg Raises (Only Chest on Box) Hold", IsHold = true, GroupId = 68 };
+
+            #endregion
+
+
         }
     }
 }

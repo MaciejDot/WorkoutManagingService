@@ -77,6 +77,12 @@ namespace WorkoutManagingService.Data.Seed
 
             yield return new GroupOfExercises { Id = 61, Name = "Dead Lift" };
             yield return new GroupOfExercises { Id = 62, Name = "Bridge" };
+            yield return new GroupOfExercises { Id = 63, Name = "Box Planche" };
+            yield return new GroupOfExercises { Id = 64, Name = "Front Lever Raises" };
+            yield return new GroupOfExercises { Id = 65, Name = "Box Planche Raises" };
+            yield return new GroupOfExercises { Id = 66, Name = "Box Planche Press" };
+            yield return new GroupOfExercises { Id = 67, Name = "Reverse Leg Raises" };
+            yield return new GroupOfExercises { Id = 68, Name = "Reverse Leg Raises Hold" };
         }
     }
 }

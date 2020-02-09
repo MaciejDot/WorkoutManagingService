@@ -9,5 +9,6 @@ namespace WorkoutManagingService.Data.Entities
         public string Id { get; set; }
         public string Username { get; set; }
         public ICollection<Workout> Workouts { get; set; }
+        public ICollection<WorkoutPlan> WorkoutPlans { get; set; }
     }
 }

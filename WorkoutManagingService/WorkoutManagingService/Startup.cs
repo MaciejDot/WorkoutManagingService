@@ -12,6 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WorkoutManagingService.Data;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using RestSharp;
+using System.Security.Cryptography;
+using System.Reflection;
+using WorkoutManagingService.Configuration;
 
 namespace WorkoutManagingService
 {
@@ -28,6 +35,40 @@ namespace WorkoutManagingService
         {
             services.AddControllers();
             services.AddHealthChecks();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+            var request = new RestRequest(Configuration.GetValue<string>("TokenServiceRSAAddress"), Method.GET);
+            var parameters = new RestClient().Execute<RSAPublicParameters>(request).Data;
+            var rsa = RSA.Create(new RSAParameters
+            {
+                Exponent = Convert.FromBase64String(parameters.Exponent),
+                Modulus = Convert.FromBase64String(parameters.Modulus)
+            });
+            services
+                .AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new RsaSecurityKey(rsa),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
             services.AddDbContext<WorkoutManagingServiceContext>(x => x.UseSqlServer(Configuration.GetConnectionString("WorkoutManagingService")));
         }
 
@@ -41,14 +82,12 @@ namespace WorkoutManagingService
             {
                 app.UseHsts();
             }
-
-            app.UseHealthChecks("/Health");
-
-            app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors();
+            app.UseHttpsRedirection();
+            app.UseHealthChecks("/Health");
 
             app.UseEndpoints(endpoints =>
             {

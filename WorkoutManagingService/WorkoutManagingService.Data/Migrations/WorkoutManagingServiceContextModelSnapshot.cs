@@ -2321,6 +2321,188 @@ namespace WorkoutManagingService.Data.Migrations
                             GroupId = 62,
                             IsHold = true,
                             Name = "Bridge"
+                        },
+                        new
+                        {
+                            Id = 6300,
+                            GroupId = 63,
+                            IsHold = true,
+                            Name = "Advanced Tuck Box Planche"
+                        },
+                        new
+                        {
+                            Id = 6301,
+                            GroupId = 63,
+                            IsHold = true,
+                            Name = "Half Lay Box Planche"
+                        },
+                        new
+                        {
+                            Id = 6302,
+                            GroupId = 63,
+                            IsHold = true,
+                            Name = "Full Box Planche"
+                        },
+                        new
+                        {
+                            Id = 6400,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Tuck Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6401,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Advanced Tuck Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6402,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Super Advanced Tuck Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6403,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Straddle Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6404,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Full Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6405,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Wide Full Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6406,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "Assisted One Arm Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6407,
+                            GroupId = 64,
+                            IsHold = false,
+                            Name = "One Arm Front Lever Raise"
+                        },
+                        new
+                        {
+                            Id = 6500,
+                            GroupId = 65,
+                            IsHold = false,
+                            Name = "Advanced Tuck Box Planche Raise"
+                        },
+                        new
+                        {
+                            Id = 6501,
+                            GroupId = 65,
+                            IsHold = false,
+                            Name = "Half Lay Box Planche Raise"
+                        },
+                        new
+                        {
+                            Id = 6502,
+                            GroupId = 65,
+                            IsHold = false,
+                            Name = "Full Box Planche Raise"
+                        },
+                        new
+                        {
+                            Id = 6600,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Advanced Tuck Box Planche Press Eccentric"
+                        },
+                        new
+                        {
+                            Id = 6601,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Advanced Tuck Box Planche Press"
+                        },
+                        new
+                        {
+                            Id = 6602,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Half Lay Box Planche Press Eccentric"
+                        },
+                        new
+                        {
+                            Id = 6603,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Half Lay Box Planche Press"
+                        },
+                        new
+                        {
+                            Id = 6604,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Full Box Planche Press Eccentric"
+                        },
+                        new
+                        {
+                            Id = 6605,
+                            GroupId = 66,
+                            IsHold = false,
+                            Name = "Full Box Planche Press"
+                        },
+                        new
+                        {
+                            Id = 6700,
+                            GroupId = 67,
+                            IsHold = false,
+                            Name = "Box Revrse Leg Raises (Hips on Box)"
+                        },
+                        new
+                        {
+                            Id = 6701,
+                            GroupId = 67,
+                            IsHold = false,
+                            Name = "Box Revrse Leg Raises (Stomach on Box)"
+                        },
+                        new
+                        {
+                            Id = 6702,
+                            GroupId = 67,
+                            IsHold = false,
+                            Name = "Box Revrse Leg Raises (Only Chest on Box)"
+                        },
+                        new
+                        {
+                            Id = 6800,
+                            GroupId = 68,
+                            IsHold = true,
+                            Name = "Box Revrse Leg Raises (Hips on Box) Hold"
+                        },
+                        new
+                        {
+                            Id = 6801,
+                            GroupId = 68,
+                            IsHold = true,
+                            Name = "Box Revrse Leg Raises (Stomach on Box) Hold"
+                        },
+                        new
+                        {
+                            Id = 6802,
+                            GroupId = 68,
+                            IsHold = true,
+                            Name = "Box Revrse Leg Raises (Only Chest on Box) Hold"
                         });
                 });
 
@@ -2333,6 +2515,13 @@ namespace WorkoutManagingService.Data.Migrations
 
                     b.Property<int>("AdditionalKgs")
                         .HasColumnType("int");
+
+                    b.Property<int>("Break")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int>("ExerciseId")
                         .HasColumnType("int");
@@ -2357,6 +2546,57 @@ namespace WorkoutManagingService.Data.Migrations
                         .HasName("IX_ExerciseExecution_Order_Workout_Exercise");
 
                     b.ToTable("ExerciseExecution","Workout");
+                });
+
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.ExerciseExecutionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Break")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxAdditionalKgs")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxReps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinAdditionalKgs")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinReps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Series")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutPlanId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ExerciseExecutionPlan");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutPlanId");
+
+                    b.HasIndex("Order", "WorkoutPlanId", "ExerciseId")
+                        .HasName("IX_ExerciseExecutionPlan_Order_WorkoutPlanId_ExerciseId");
+
+                    b.ToTable("ExerciseExecutionPlan","Workout");
                 });
 
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.GroupOfExercises", b =>
@@ -2687,6 +2927,36 @@ namespace WorkoutManagingService.Data.Migrations
                         {
                             Id = 62,
                             Name = "Bridge"
+                        },
+                        new
+                        {
+                            Id = 63,
+                            Name = "Box Planche"
+                        },
+                        new
+                        {
+                            Id = 64,
+                            Name = "Front Lever Raises"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            Name = "Box Planche Raises"
+                        },
+                        new
+                        {
+                            Id = 66,
+                            Name = "Box Planche Press"
+                        },
+                        new
+                        {
+                            Id = 67,
+                            Name = "Reverse Leg Raises"
+                        },
+                        new
+                        {
+                            Id = 68,
+                            Name = "Reverse Leg Raises Hold"
                         });
                 });
 
@@ -2717,6 +2987,9 @@ namespace WorkoutManagingService.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Executed")
                         .HasColumnType("datetime2");
 
@@ -2742,6 +3015,37 @@ namespace WorkoutManagingService.Data.Migrations
                         .HasName("IX_Workout_UserId");
 
                     b.ToTable("Workout","Workout");
+                });
+
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_WorkoutPlan");
+
+                    b.HasIndex("UserId")
+                        .HasName("IX_WorkoutPlans_UserId");
+
+                    b.ToTable("WorkoutPlan","Workout");
                 });
 
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.Exercise", b =>
@@ -2771,12 +3075,38 @@ namespace WorkoutManagingService.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.ExerciseExecutionPlan", b =>
+                {
+                    b.HasOne("WorkoutManagingService.Data.Entities.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutManagingService.Data.Entities.WorkoutPlan", "WorkoutPlan")
+                        .WithMany("ExerciseExecutionPlans")
+                        .HasForeignKey("WorkoutPlanId")
+                        .HasConstraintName("FK_ExerciseExecutionPlan_WorkoutPlans")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.Workout", b =>
                 {
                     b.HasOne("WorkoutManagingService.Data.Entities.User", "User")
                         .WithMany("Workouts")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Workouts_Users")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.HasOne("WorkoutManagingService.Data.Entities.User", "User")
+                        .WithMany("WorkoutPlans")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_WorkoutPlans_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
