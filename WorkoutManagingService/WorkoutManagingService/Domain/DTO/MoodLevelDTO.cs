@@ -7,5 +7,7 @@ namespace WorkoutManagingService.Domain.DTO
 {
     public class MoodLevelDTO
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

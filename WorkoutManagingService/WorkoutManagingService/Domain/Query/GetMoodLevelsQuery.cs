@@ -7,7 +7,7 @@ using WorkoutManagingService.Domain.DTO;
 
 namespace WorkoutManagingService.Domain.Query
 {
-    public class GetFatiguesLevels : IRequest<IEnumerable<FatigueLevelDTO>>
+    public class GetMoodLevelsQuery : IRequest<List<MoodLevelDTO>>
     {
     }
 }
