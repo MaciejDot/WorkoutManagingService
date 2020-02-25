@@ -2599,6 +2599,52 @@ namespace WorkoutManagingService.Data.Migrations
                     b.ToTable("ExerciseExecutionPlan","Workout");
                 });
 
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.FatigueLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
+
+                    b.HasKey("Id")
+                        .HasName("PK_FatihueLevel");
+
+                    b.ToTable("FatihueLevel","Workout");
+
+                    b.HasAnnotation("READONLY_ANNOTATION", true);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "NoneFatigue"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "MildFatigue"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "ModerateFatigue"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "SevireFatigue"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "ExtremeFatigue"
+                        });
+                });
+
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.GroupOfExercises", b =>
                 {
                     b.Property<int>("Id")
@@ -2960,6 +3006,62 @@ namespace WorkoutManagingService.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("WorkoutManagingService.Data.Entities.MoodLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
+
+                    b.HasKey("Id")
+                        .HasName("PK_MoodLevel");
+
+                    b.ToTable("MoodLevel","Workout");
+
+                    b.HasAnnotation("READONLY_ANNOTATION", true);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Excited"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Happy"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Contented"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Bored"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Depressed"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Upset"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Sad"
+                        });
+                });
+
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -2979,10 +3081,8 @@ namespace WorkoutManagingService.Data.Migrations
 
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.Workout", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("MoodLevelId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -2993,6 +3093,12 @@ namespace WorkoutManagingService.Data.Migrations
                     b.Property<DateTime>("Executed")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FatigueLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
@@ -3002,14 +3108,16 @@ namespace WorkoutManagingService.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.HasKey("Id")
-                        .HasName("PK_Workout");
+                    b.HasKey("MoodLevelId")
+                        .HasName("IX_Workout_MoodLevelId");
 
                     b.HasIndex("Created")
                         .HasName("IX_Workout_Created");
 
                     b.HasIndex("Executed")
                         .HasName("IX_Workout_Executed");
+
+                    b.HasIndex("FatigueLevelId");
 
                     b.HasIndex("UserId")
                         .HasName("IX_Workout_UserId");
@@ -3030,6 +3138,9 @@ namespace WorkoutManagingService.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(400)")
@@ -3093,6 +3204,20 @@ namespace WorkoutManagingService.Data.Migrations
 
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.Workout", b =>
                 {
+                    b.HasOne("WorkoutManagingService.Data.Entities.FatigueLevel", "FatigueLevel")
+                        .WithMany("Workouts")
+                        .HasForeignKey("FatigueLevelId")
+                        .HasConstraintName("FK_Workout_FatigueLevels")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutManagingService.Data.Entities.MoodLevel", "MoodLevel")
+                        .WithMany("Workouts")
+                        .HasForeignKey("MoodLevelId")
+                        .HasConstraintName("FK_Workout_MoodLevel")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WorkoutManagingService.Data.Entities.User", "User")
                         .WithMany("Workouts")
                         .HasForeignKey("UserId")

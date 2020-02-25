@@ -7,9 +7,7 @@ using WorkoutManagingService.Domain.DTO;
 
 namespace WorkoutManagingService.Domain.Query
 {
-    public class GetUserWorkoutPlanQuery : IRequest<WorkoutPlanDTO>
+    public class GetMoodLevels : IRequest<IEnumerable<MoodLevelDTO>>
     {
-        public string UserId { get; set; }
-        public int WorkoutPlanId { get; set; }
     }
 }

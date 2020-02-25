@@ -10,16 +10,12 @@ namespace WorkoutManagingService.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class WorkoutStaticticsController : ControllerBase
+    public class FatigueController : ControllerBase
     {
         [HttpGet]
-        [Authorize("Admin")]
-        public async Task Get() { }
-
-        [HttpGet]
-        [Authorize("Admin")]
-        public async Task Get(string username) { }
-
-
+        [AllowAnonymous]
+        public async Task<ActionResult> Get() {
+        
+        }
     }
 }

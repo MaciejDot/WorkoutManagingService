@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WorkoutManagingService.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,20 @@ namespace WorkoutManagingService.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FatihueLevel",
+                schema: "Workout",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 400, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FatihueLevel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GroupOfExercise",
                 schema: "Workout",
                 columns: table => new
@@ -41,28 +55,17 @@ namespace WorkoutManagingService.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Workout",
+                name: "MoodLevel",
                 schema: "Workout",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Executed = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<string>(maxLength: 100, nullable: false),
-                    Name = table.Column<string>(maxLength: 300, nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 400, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Workout", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Workouts_Users",
-                        column: x => x.UserId,
-                        principalSchema: "Security",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_MoodLevel", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +78,7 @@ namespace WorkoutManagingService.Data.Migrations
                     UserId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 400, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    IsPublic = table.Column<bool>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -113,35 +117,41 @@ namespace WorkoutManagingService.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExerciseExecution",
+                name: "Workout",
                 schema: "Workout",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ExerciseId = table.Column<int>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    Repetitions = table.Column<int>(nullable: false),
-                    AdditionalKgs = table.Column<int>(nullable: false),
-                    Break = table.Column<int>(nullable: false),
-                    WorkoutId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(maxLength: 1000, nullable: true)
+                    MoodLevelId = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
+                    Created = table.Column<DateTime>(nullable: false),
+                    Executed = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(maxLength: 100, nullable: false),
+                    Name = table.Column<string>(maxLength: 300, nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    FatigueLevelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExerciseExecution", x => x.Id);
+                    table.PrimaryKey("IX_Workout_MoodLevelId", x => x.MoodLevelId);
                     table.ForeignKey(
-                        name: "FK_ExerciseExecution_Exercise",
-                        column: x => x.ExerciseId,
+                        name: "FK_Workout_FatigueLevels",
+                        column: x => x.FatigueLevelId,
                         principalSchema: "Workout",
-                        principalTable: "Exercise",
+                        principalTable: "FatihueLevel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExerciseExecutions_Workout",
-                        column: x => x.WorkoutId,
+                        name: "FK_Workout_MoodLevel",
+                        column: x => x.MoodLevelId,
                         principalSchema: "Workout",
-                        principalTable: "Workout",
+                        principalTable: "MoodLevel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Workouts_Users",
+                        column: x => x.UserId,
+                        principalSchema: "Security",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -183,80 +193,142 @@ namespace WorkoutManagingService.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ExerciseExecution",
+                schema: "Workout",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExerciseId = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    Repetitions = table.Column<int>(nullable: false),
+                    AdditionalKgs = table.Column<int>(nullable: false),
+                    Break = table.Column<int>(nullable: false),
+                    WorkoutId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseExecution", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExerciseExecution_Exercise",
+                        column: x => x.ExerciseId,
+                        principalSchema: "Workout",
+                        principalTable: "Exercise",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseExecutions_Workout",
+                        column: x => x.WorkoutId,
+                        principalSchema: "Workout",
+                        principalTable: "Workout",
+                        principalColumn: "MoodLevelId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Workout",
+                table: "FatihueLevel",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "NoneFatigue" },
+                    { 2, "MildFatigue" },
+                    { 3, "ModerateFatigue" },
+                    { 4, "SevireFatigue" },
+                    { 5, "ExtremeFatigue" }
+                });
+
             migrationBuilder.InsertData(
                 schema: "Workout",
                 table: "GroupOfExercise",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Handstand" },
-                    { 37, "Planche Lean" },
-                    { 38, "Planche Lean Push Ups" },
-                    { 39, "Plank" },
-                    { 40, "Maltese Lean" },
-                    { 41, "Iron Cross" },
+                    { 50, "Impossible Dips" },
+                    { 49, "Dynamic Superman" },
+                    { 48, "Dynamic Hollow Body" },
+                    { 47, "Leg Raises" },
+                    { 46, "Superman" },
+                    { 45, "Hollow Body" },
                     { 42, "Inverted Cross Press" },
                     { 43, "Reverse Planche" },
-                    { 44, "Victorian Cross Leans" },
-                    { 45, "Hollow Body" },
-                    { 46, "Superman" },
-                    { 47, "Leg Raises" },
-                    { 48, "Dynamic Hollow Body" },
-                    { 49, "Dynamic Superman" },
-                    { 50, "Impossible Dips" },
-                    { 36, "Handstand Flag" },
                     { 51, "Neck Hold" },
-                    { 53, "Half Zanetti Flies" },
-                    { 54, "Zanetti Flies" },
-                    { 55, "Planche Hollow Body" },
-                    { 56, "Maltese Hollow Body" },
-                    { 57, "Bench Press" },
-                    { 58, "Incline Bench Press" },
-                    { 59, "OHP" },
-                    { 60, "Biceps Curls" },
-                    { 61, "Dead Lift" },
-                    { 62, "Bridge" },
-                    { 63, "Box Planche" },
-                    { 64, "Front Lever Raises" },
-                    { 65, "Box Planche Raises" },
-                    { 66, "Box Planche Press" },
+                    { 41, "Iron Cross" },
+                    { 40, "Maltese Lean" },
+                    { 39, "Plank" },
+                    { 38, "Planche Lean Push Ups" },
+                    { 44, "Victorian Cross Leans" },
                     { 52, "Christo" },
+                    { 55, "Planche Hollow Body" },
+                    { 54, "Zanetti Flies" },
+                    { 68, "Reverse Leg Raises Hold" },
+                    { 67, "Reverse Leg Raises" },
+                    { 66, "Box Planche Press" },
+                    { 65, "Box Planche Raises" },
+                    { 64, "Front Lever Raises" },
+                    { 63, "Box Planche" },
+                    { 53, "Half Zanetti Flies" },
+                    { 62, "Bridge" },
+                    { 60, "Biceps Curls" },
+                    { 59, "OHP" },
+                    { 58, "Incline Bench Press" },
+                    { 57, "Bench Press" },
+                    { 56, "Maltese Hollow Body" },
+                    { 37, "Planche Lean" },
+                    { 61, "Dead Lift" },
+                    { 36, "Handstand Flag" },
                     { 35, "Inverted Cross Press" },
-                    { 34, "Inverted Cross" },
-                    { 33, "Maltese Press" },
-                    { 2, "Handstand Push Ups" },
-                    { 3, "Handstand Press" },
-                    { 4, "L-sit V-sit Manna" },
-                    { 5, "Back Lever" },
-                    { 6, "Back Lever Press" },
-                    { 7, "Back Lever Pull Ups" },
-                    { 8, "Front Lever" },
-                    { 9, "Front Lever Press" },
-                    { 10, "Front Lever Pull Ups" },
-                    { 11, "Rows" },
-                    { 12, "Pull Ups" },
-                    { 13, "Support Hold" },
                     { 14, "Dips" },
+                    { 34, "Inverted Cross" },
+                    { 13, "Support Hold" },
+                    { 12, "Pull Ups" },
+                    { 11, "Rows" },
+                    { 10, "Front Lever Pull Ups" },
+                    { 9, "Front Lever Press" },
                     { 15, "Human Flag" },
+                    { 8, "Front Lever" },
+                    { 6, "Back Lever Press" },
+                    { 5, "Back Lever" },
+                    { 4, "L-sit V-sit Manna" },
+                    { 3, "Handstand Press" },
+                    { 2, "Handstand Push Ups" },
+                    { 1, "Handstand" },
+                    { 7, "Back Lever Pull Ups" },
                     { 16, "Muscle Ups" },
                     { 17, "Hefesto" },
                     { 18, "High Pull Ups" },
+                    { 33, "Maltese Press" },
                     { 32, "Maltese" },
                     { 31, "Planche Press" },
                     { 30, "Planche Push Ups" },
                     { 29, "Planche" },
                     { 28, "Front Lever Touch" },
                     { 27, "Dragon Press Press" },
-                    { 67, "Reverse Leg Raises" },
                     { 26, "Dragon Press" },
+                    { 25, "Dragon Flag Press" },
                     { 24, "Dragon Flag" },
                     { 23, "Victorian Cross" },
                     { 22, "Reverse Hang" },
                     { 21, "Dead Hang" },
                     { 20, "Push Ups" },
-                    { 19, "Squats" },
-                    { 25, "Dragon Flag Press" },
-                    { 68, "Reverse Leg Raises Hold" }
+                    { 19, "Squats" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Workout",
+                table: "MoodLevel",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 5, "Depressed" },
+                    { 4, "Bored" },
+                    { 6, "Upset" },
+                    { 2, "Happy" },
+                    { 1, "Excited" },
+                    { 3, "Contented" },
+                    { 7, "Sad" }
                 });
 
             migrationBuilder.InsertData(
@@ -673,6 +745,12 @@ namespace WorkoutManagingService.Data.Migrations
                 column: "Executed");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Workout_FatigueLevelId",
+                schema: "Workout",
+                table: "Workout",
+                column: "FatigueLevelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workout_UserId",
                 schema: "Workout",
                 table: "Workout",
@@ -705,6 +783,14 @@ namespace WorkoutManagingService.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "WorkoutPlan",
+                schema: "Workout");
+
+            migrationBuilder.DropTable(
+                name: "FatihueLevel",
+                schema: "Workout");
+
+            migrationBuilder.DropTable(
+                name: "MoodLevel",
                 schema: "Workout");
 
             migrationBuilder.DropTable(

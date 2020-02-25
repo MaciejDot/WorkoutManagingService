@@ -21,26 +21,29 @@ namespace WorkoutManagingService.Domain.QueryHandler
         }
         public Task<WorkoutPlanDTO> Handle(GetUserWorkoutPlanQuery query, CancellationToken cancellationToken)
         {
-            return _context.WorkoutPlans.Select(x => new WorkoutPlanDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Created = x.Created,
-                Description = x.Description,
-                Exercises = x.ExerciseExecutionPlans.Select(y => new ExercisePlanViewModel
+            return _context.WorkoutPlans
+                .Where(x => x.Id == query.WorkoutPlanId && (x.UserId == query.UserId || x.IsPublic))
+                .Select(x => new WorkoutPlanDTO
                 {
-                    Series = y.Series,
-                    MinReps = y.MinReps,
-                    MaxReps = y.MaxReps,
-                    MinAdditionalKgs = y.MinAdditionalKgs,
-                    MaxAdditionalKgs = y.MaxAdditionalKgs,
-                    ExerciseId = y.ExerciseId,
-                    ExerciseName = y.Exercise.Name,
-                    Order = y.Order,
-                    Description = y.Description,
-                    Break = y.Break
-                })
-            }).FirstAsync(cancellationToken);
+                    Id = x.Id,
+                    Name = x.Name,
+                    Created = x.Created,
+                    Description = x.Description,
+                    Exercises = x.ExerciseExecutionPlans.Select(y => new ExercisePlanViewModel
+                    {
+                        Series = y.Series,
+                        MinReps = y.MinReps,
+                        MaxReps = y.MaxReps,
+                        MinAdditionalKgs = y.MinAdditionalKgs,
+                        MaxAdditionalKgs = y.MaxAdditionalKgs,
+                        ExerciseId = y.ExerciseId,
+                        ExerciseName = y.Exercise.Name,
+                        Order = y.Order,
+                        Description = y.Description,
+                        Break = y.Break
+                    })
+                .OrderBy(y => y.Order)
+                }).FirstAsync(cancellationToken);
         }
     }
 }

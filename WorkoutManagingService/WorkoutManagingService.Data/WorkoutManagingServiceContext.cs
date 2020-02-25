@@ -9,7 +9,6 @@ namespace WorkoutManagingService.Data
 {
     public class WorkoutManagingServiceContext : DbContext
     {
-        
         public WorkoutManagingServiceContext(DbContextOptions<WorkoutManagingServiceContext> options)
            : base(options)
         {
@@ -19,6 +18,8 @@ namespace WorkoutManagingService.Data
             build.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;");
         }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<MoodLevel> MoodLevels { get; set; }
+        public DbSet<FatigueLevel> FatigueLevels { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<ExerciseExecution> ExerciseExecutions { get; set; }
         public DbSet<User> Users { get; set; }
@@ -100,6 +101,12 @@ namespace WorkoutManagingService.Data
 
                 entity.HasKey(r => r.Id)
                     .HasName("PK_Workout");
+
+                entity.HasKey(r => r.FatigueLevelId)
+                    .HasName("IX_Workout_FatigueLevelId");
+
+                entity.HasKey(r => r.MoodLevelId)
+                    .HasName("IX_Workout_MoodLevelId");
 
                 entity.Property(r => r.UserId)
                     .HasMaxLength(100);
@@ -189,6 +196,46 @@ namespace WorkoutManagingService.Data
                     .HasMaxLength(400);
 
                 entity.HasData(new GroupOfExerciseSeed().GroupsOfExercises());
+
+                entity.HasAnnotation("READONLY_ANNOTATION", true);
+            });
+
+            modelBuilder.Entity<MoodLevel>(entity => {
+                entity.ToTable("MoodLevel", "Workout");
+
+                entity.HasKey(r => r.Id)
+                    .HasName("PK_MoodLevel");
+
+                entity.Property(r => r.Name)
+                    .HasMaxLength(400);
+
+                entity.HasMany(r => r.Workouts)
+                    .WithOne(r => r.MoodLevel)
+                    .HasForeignKey(r => r.MoodLevelId)
+                    .HasConstraintName("FK_Workout_MoodLevel")
+                    .IsRequired();
+
+                entity.HasData(new MoodLevelSeed().MoodLevels());
+
+                entity.HasAnnotation("READONLY_ANNOTATION", true);
+            });
+
+            modelBuilder.Entity<FatigueLevel>(entity => {
+                entity.ToTable("FatihueLevel", "Workout");
+
+                entity.HasKey(r => r.Id)
+                    .HasName("PK_FatihueLevel");
+
+                entity.Property(r => r.Name)
+                    .HasMaxLength(400);
+
+                entity.HasMany(r => r.Workouts)
+                    .WithOne(r => r.FatigueLevel)
+                    .HasForeignKey(r => r.FatigueLevelId)
+                    .HasConstraintName("FK_Workout_FatigueLevels")
+                    .IsRequired();
+
+                entity.HasData(new FatigueLevelSeed().FatigueLevels());
 
                 entity.HasAnnotation("READONLY_ANNOTATION", true);
             });

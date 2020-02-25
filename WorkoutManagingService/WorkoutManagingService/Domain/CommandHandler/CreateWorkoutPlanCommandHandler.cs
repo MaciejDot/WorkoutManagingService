@@ -37,7 +37,6 @@ namespace WorkoutManagingService.Domain.CommandHandler
                             Description = x.Description,
                             Break = x.Break,
                             ExerciseId = x.ExerciseId,
-                            Exercise = _context.Exercises.Find(x.ExerciseId),
                             MaxAdditionalKgs = x.MaxAdditionalKgs,
                             MinAdditionalKgs = x.MinAdditionalKgs,
                             MaxReps = x.MaxReps,

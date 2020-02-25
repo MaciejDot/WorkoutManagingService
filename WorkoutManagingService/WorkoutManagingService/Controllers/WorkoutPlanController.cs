@@ -31,24 +31,23 @@ namespace WorkoutManagingService.Controllers
             return await _mediator.Send(new GetUserWorkoutPlansQuery { UserId = User.Claims.Single(x => x.Type == "Id").Value }, token);
         }
 
-        [HttpGet("/[WorkoutId]")]
+        [HttpGet("{WorkoutId}")]
         [Authorize]
-        public async Task<ActionResult<List<WorkoutPlanThumbnailDTO>>> Get(int WorkoutId, CancellationToken token)
+        public async Task<ActionResult<WorkoutPlanDTO>> Get(int WorkoutId, CancellationToken token)
         {
-            if (!await _mediator.Send(new IsUserWorkoutPlanOwnerQuery
+            try
             {
-                UserId = User.Claims.Single(x => x.Type == "Id").Value,
-                WorkoutId = WorkoutId
-            }, token))
-            {
-                return Unauthorized();
+                return await _mediator.Send(new GetUserWorkoutPlanQuery { UserId = User.Claims.Single(x => x.Type == "Id").Value, WorkoutPlanId = WorkoutId }, token);
             }
-            return await _mediator.Send(new GetUserWorkoutPlansQuery { UserId = User.Claims.Single(x => x.Type == "Id").Value }, token);
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> Post(WorkoutPlanModel request, CancellationToken token)
+        public async Task<IActionResult> Post(WorkoutPlanModel request, CancellationToken token)
         {
             await _mediator.Send(new CreateWorkoutPlanCommand()
             {
@@ -61,28 +60,9 @@ namespace WorkoutManagingService.Controllers
             return Ok();
         }
 
-        [HttpDelete("/[WorkoutId]")]
+        [HttpDelete("{WorkoutId}")]
         [Authorize]
-        public async Task<ActionResult> Delete(int WorkoutId, CancellationToken token)
-        {
-            if (!await _mediator.Send(new IsUserWorkoutPlanOwnerQuery
-            {
-                UserId = User.Claims.Single(x => x.Type == "Id").Value,
-                WorkoutId = WorkoutId
-            },token))
-            {
-                return Unauthorized();
-            }
-            await _mediator.Send(new DeleteWorkoutPlanCommand
-            {
-                WorkoutId = WorkoutId,
-            },token);
-            return Ok();
-        }
-
-        [HttpPut("/[WorkoutId]")]
-        [Authorize]
-        public async Task<ActionResult> Put(int WorkoutId, WorkoutPlanModel request, CancellationToken token)
+        public async Task<IActionResult> Delete(int WorkoutId, CancellationToken token)
         {
             if (!await _mediator.Send(new IsUserWorkoutPlanOwnerQuery
             {
@@ -96,14 +76,51 @@ namespace WorkoutManagingService.Controllers
             {
                 WorkoutId = WorkoutId,
             }, token);
-            await _mediator.Send(new CreateWorkoutPlanCommand()
+            return Ok();
+        }
+
+        [HttpPut("{WorkoutId}")]
+        [Authorize]
+        public async Task<IActionResult> Put(int WorkoutId, bool IsPublic, CancellationToken token)
+        {
+            if (!await _mediator.Send(new IsUserWorkoutPlanOwnerQuery
             {
                 UserId = User.Claims.Single(x => x.Type == "Id").Value,
+                WorkoutId = WorkoutId
+            }, token))
+            {
+                return Unauthorized();
+            }
+
+            await _mediator.Send(new UpdateWorkoutPlanStatusCommand
+            {
+                IsPublic = IsPublic,
+                WorkoutId = WorkoutId,
+            }, token);
+            return Ok();
+        }
+
+
+        [HttpPatch("{WorkoutId}")]
+        [Authorize]
+        public async Task<IActionResult> Patch(int WorkoutId, WorkoutPlanModel request, CancellationToken token)
+        {
+            if (!await _mediator.Send(new IsUserWorkoutPlanOwnerQuery
+            {
+                UserId = User.Claims.Single(x => x.Type == "Id").Value,
+                WorkoutId = WorkoutId
+            }, token))
+            {
+                return Unauthorized();
+            }
+            await _mediator.Send(new UpdateWorkoutPlanCommand
+            {
+                WorkoutId = WorkoutId,
                 Name = request.Name,
                 Description = request.Description,
                 Exercises = request.Exercises
             },
-           token);
+            token);
             return Ok();
         }
 
