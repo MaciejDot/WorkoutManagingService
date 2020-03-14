@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WorkoutManagingService.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -121,18 +121,19 @@ namespace WorkoutManagingService.Data.Migrations
                 schema: "Workout",
                 columns: table => new
                 {
-                    MoodLevelId = table.Column<int>(nullable: false),
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Created = table.Column<DateTime>(nullable: false),
                     Executed = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(maxLength: 100, nullable: false),
                     Name = table.Column<string>(maxLength: 300, nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    FatigueLevelId = table.Column<int>(nullable: false)
+                    FatigueLevelId = table.Column<int>(nullable: false),
+                    MoodLevelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("IX_Workout_MoodLevelId", x => x.MoodLevelId);
+                    table.PrimaryKey("PK_Workout", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Workout_FatigueLevels",
                         column: x => x.FatigueLevelId,
@@ -205,6 +206,7 @@ namespace WorkoutManagingService.Data.Migrations
                     Repetitions = table.Column<int>(nullable: false),
                     AdditionalKgs = table.Column<int>(nullable: false),
                     Break = table.Column<int>(nullable: false),
+                    Series = table.Column<int>(nullable: false),
                     WorkoutId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true)
                 },
@@ -223,7 +225,7 @@ namespace WorkoutManagingService.Data.Migrations
                         column: x => x.WorkoutId,
                         principalSchema: "Workout",
                         principalTable: "Workout",
-                        principalColumn: "MoodLevelId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -749,6 +751,12 @@ namespace WorkoutManagingService.Data.Migrations
                 schema: "Workout",
                 table: "Workout",
                 column: "FatigueLevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workout_MoodLevelId",
+                schema: "Workout",
+                table: "Workout",
+                column: "MoodLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Workout_UserId",

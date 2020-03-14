@@ -21,6 +21,7 @@ namespace WorkoutManagingService.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<MoodLevelDTO>>> Get(CancellationToken token)
         {
             return Ok(await _mediator.Send(new GetMoodLevelsQuery(),token));

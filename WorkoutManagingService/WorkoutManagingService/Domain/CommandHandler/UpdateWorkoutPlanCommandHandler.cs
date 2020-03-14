@@ -23,7 +23,6 @@ namespace WorkoutManagingService.Domain.CommandHandler
         {
             _context.ExerciseExecutionPlans.RemoveRange(_context.ExerciseExecutionPlans.Where(x => x.WorkoutPlanId == command.WorkoutId));
             var workout = await _context.WorkoutPlans.FindAsync(new[] { command.WorkoutId }, token);
-            workout.Created = DateTime.Now;
             workout.Name = command.Name;
             workout.Description = command.Description;
             workout.ExerciseExecutionPlans = command.Exercises

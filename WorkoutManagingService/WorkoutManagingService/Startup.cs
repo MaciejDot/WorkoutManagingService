@@ -19,6 +19,8 @@ using RestSharp;
 using System.Security.Cryptography;
 using System.Reflection;
 using WorkoutManagingService.Configuration;
+using Microsoft.OpenApi.Models;
+using WorkoutManagingService.Configuration.ServiceCollectionExtensions;
 
 namespace WorkoutManagingService
 {
@@ -33,6 +35,11 @@ namespace WorkoutManagingService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<WorkoutManagingServiceContext>(x => 
+                x.UseSqlServer(
+                    Configuration.GetConnectionString("WorkoutManagingService")
+                )
+            );
             services.AddControllers();
             services.AddHealthChecks();
             services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -44,36 +51,20 @@ namespace WorkoutManagingService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-            var request = new RestRequest(Configuration.GetValue<string>("TokenServiceRSAAddress"), Method.GET);
-            var parameters = new RestClient().Execute<RSAPublicParameters>(request).Data;
-            var rsa = RSA.Create(new RSAParameters
+            services.ConfigureJWTTokenAuthorization(Configuration.GetValue<string>("TokenServiceRSAAddress"));
+            services.AddSwaggerGen(c =>
             {
-                Exponent = Convert.FromBase64String(parameters.Exponent),
-                Modulus = Convert.FromBase64String(parameters.Modulus)
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Workout Managing Service Api", Version = "v1" });
             });
-            services
-                .AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new RsaSecurityKey(rsa),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-            services.AddDbContext<WorkoutManagingServiceContext>(x => x.UseSqlServer(Configuration.GetConnectionString("WorkoutManagingService")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Workout Managing Service Api");
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

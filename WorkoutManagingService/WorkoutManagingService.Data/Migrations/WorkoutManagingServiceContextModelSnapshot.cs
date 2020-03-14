@@ -2532,6 +2532,9 @@ namespace WorkoutManagingService.Data.Migrations
                     b.Property<int>("Repetitions")
                         .HasColumnType("int");
 
+                    b.Property<int>("Series")
+                        .HasColumnType("int");
+
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
@@ -3081,8 +3084,10 @@ namespace WorkoutManagingService.Data.Migrations
 
             modelBuilder.Entity("WorkoutManagingService.Data.Entities.Workout", b =>
                 {
-                    b.Property<int>("MoodLevelId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -3096,7 +3101,7 @@ namespace WorkoutManagingService.Data.Migrations
                     b.Property<int>("FatigueLevelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("MoodLevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -3108,8 +3113,8 @@ namespace WorkoutManagingService.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.HasKey("MoodLevelId")
-                        .HasName("IX_Workout_MoodLevelId");
+                    b.HasKey("Id")
+                        .HasName("PK_Workout");
 
                     b.HasIndex("Created")
                         .HasName("IX_Workout_Created");
@@ -3117,7 +3122,11 @@ namespace WorkoutManagingService.Data.Migrations
                     b.HasIndex("Executed")
                         .HasName("IX_Workout_Executed");
 
-                    b.HasIndex("FatigueLevelId");
+                    b.HasIndex("FatigueLevelId")
+                        .HasName("IX_Workout_FatigueLevelId");
+
+                    b.HasIndex("MoodLevelId")
+                        .HasName("IX_Workout_MoodLevelId");
 
                     b.HasIndex("UserId")
                         .HasName("IX_Workout_UserId");

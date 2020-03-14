@@ -1,0 +1,50 @@
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using WorkoutManagingService.Data;
+using WorkoutManagingService.Domain.DTO;
+using WorkoutManagingService.Domain.Query;
+
+namespace WorkoutManagingService.Domain.QueryHandler
+{
+    public class GetUserWorkoutQueryHandler : IRequestHandler<GetUserWorkoutQuery, WorkoutDTO>
+    {
+        private readonly WorkoutManagingServiceContext _context;
+        public GetUserWorkoutQueryHandler(WorkoutManagingServiceContext context)
+        {
+            _context = context;
+        }
+        public Task<WorkoutDTO> Handle(GetUserWorkoutQuery query, CancellationToken token)
+        {
+            return _context.Workouts
+                .Where(x => x.Id == query.WorkoutId &&
+                    (x.UserId == query.UserId || x.IsPublic))
+                .Select(x => new WorkoutDTO
+                {
+                    Id = x.Id,
+                    Mood = x.MoodLevelId,
+                    Fatigue = x.FatigueLevelId,
+                    Name = x.Name,
+                    Description = x.Description,
+                    DateOfWorkout = x.Executed,
+                    Exercises = x.ExerciseExecutions
+                    .Select(x => new SendExerciseExecutionDTO
+                    {
+                        AdditionalKgs = x.AdditionalKgs,
+                        Break = x.Break,
+                        Description = x.Description,
+                        ExerciseId = x.ExerciseId,
+                        Order = x.Order,
+                        Reps = x.Repetitions,
+                        Series = x.Series,
+                        Name = x.Exercise.Name
+                    })
+                })
+                .FirstAsync(token);
+        }
+    }
+}

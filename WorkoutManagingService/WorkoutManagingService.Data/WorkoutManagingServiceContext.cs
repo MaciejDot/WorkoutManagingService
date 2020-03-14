@@ -13,10 +13,6 @@ namespace WorkoutManagingService.Data
            : base(options)
         {
         }
-        
-        protected override void OnConfiguring(DbContextOptionsBuilder build) {
-            build.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;");
-        }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<MoodLevel> MoodLevels { get; set; }
         public DbSet<FatigueLevel> FatigueLevels { get; set; }
@@ -102,10 +98,10 @@ namespace WorkoutManagingService.Data
                 entity.HasKey(r => r.Id)
                     .HasName("PK_Workout");
 
-                entity.HasKey(r => r.FatigueLevelId)
+                entity.HasIndex(r => r.FatigueLevelId)
                     .HasName("IX_Workout_FatigueLevelId");
 
-                entity.HasKey(r => r.MoodLevelId)
+                entity.HasIndex(r => r.MoodLevelId)
                     .HasName("IX_Workout_MoodLevelId");
 
                 entity.Property(r => r.UserId)

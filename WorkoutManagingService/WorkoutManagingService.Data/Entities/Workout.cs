@@ -19,5 +19,6 @@ namespace WorkoutManagingService.Data.Entities
         public MoodLevel MoodLevel { get; set; }
         public int MoodLevelId { get; set; }
         public ICollection<ExerciseExecution> ExerciseExecutions { get; set; }
+        public bool IsPublic { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace WorkoutManagingService.Data.Entities
         public int Repetitions { get; set; }
         public int AdditionalKgs { get; set; }
         public int Break { get; set; }
+        public int Series { get; set; }
         public int WorkoutId { get; set; }
         public string Description { get; set; }
     }

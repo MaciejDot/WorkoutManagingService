@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CalistheniscEncyclopediaContracts" Version="1.0.0" />
+    <PackageReference Include="MassTransit" Version="6.2.1" />
     <PackageReference Include="MediatR" Version="8.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
@@ -19,10 +21,17 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="RestSharp" Version="106.10.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WorkoutManagingService.Data\WorkoutManagingService.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\MassTransitCofiguration\" />
   </ItemGroup>
 
 

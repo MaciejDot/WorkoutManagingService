@@ -3,5 +3,5 @@
 ##Installation
 
 ```PowerShell
-$env:SQLCONNSTR_WorkoutManagingService="Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;"
+$env=SQLCONNSTR_WorkoutManagingService="Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;"
 ```
