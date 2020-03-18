@@ -29,20 +29,25 @@ namespace WorkoutManagingService.Domain.CommandHandler
                     Created = DateTime.Now,
                     Name = command.Name,
                     Description = command.Description,
-                    ExerciseExecutionPlans = command.Exercises
-                        .Select(x => new ExerciseExecutionPlan
-                        {
-                            Order = x.Order,
-                            Series = x.Series,
-                            Description = x.Description,
-                            Break = x.Break,
-                            ExerciseId = x.ExerciseId,
-                            MaxAdditionalKgs = x.MaxAdditionalKgs,
-                            MinAdditionalKgs = x.MinAdditionalKgs,
-                            MaxReps = x.MaxReps,
-                            MinReps = x.MinReps
-                        })
-                        .ToList()
+                    WorkoutPlanVersions = new List<WorkoutPlanVersion>()
+                    {
+                        new WorkoutPlanVersion{
+                            ExerciseExecutionPlans = command.Exercises
+                            .Select(x => new ExerciseExecutionPlan
+                            {
+                                Order = x.Order,
+                                Series = x.Series,
+                                Description = x.Description,
+                                Break = x.Break,
+                                ExerciseId = x.ExerciseId,
+                                MaxAdditionalKgs = x.MaxAdditionalKgs,
+                                MinAdditionalKgs = x.MinAdditionalKgs,
+                                MaxReps = x.MaxReps,
+                                MinReps = x.MinReps
+                            })
+                            .ToList()
+                        }
+                    }
                 },
                 token);
             await _context.SaveChangesAsync(token);

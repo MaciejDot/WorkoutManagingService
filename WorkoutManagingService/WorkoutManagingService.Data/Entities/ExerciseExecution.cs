@@ -10,12 +10,12 @@ namespace WorkoutManagingService.Data.Entities
         public Exercise Exercise { get; set; }
         public int ExerciseId { get; set; }
         public int Order { get; set; }
-        public Workout Workout { get; set; }
+        public WorkoutVersion WorkoutVersion { get; set; }
         public int Repetitions { get; set; }
         public int AdditionalKgs { get; set; }
         public int Break { get; set; }
         public int Series { get; set; }
-        public int WorkoutId { get; set; }
+        public int WorkoutVersionId { get; set; }
         public string Description { get; set; }
     }
 }

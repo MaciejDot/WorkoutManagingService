@@ -19,16 +19,19 @@ namespace WorkoutManagingService.Domain.CommandHandler
         }
         public async Task<Unit> Handle(CreateWorkoutCommand command, CancellationToken token)
         {
-            await _context.Workouts.AddAsync(new Workout {
+            await _context.Workouts.AddAsync(new Workout
+            {
                 UserId = command.UserId,
                 Name = command.WorkoutName,
                 Created = command.CreatedTime,
                 Description = command.Description,
-                FatigueLevelId = (int)command.FatigueLevel,
-                MoodLevelId = (int)command.MoodLevel,
-                Executed = command.ExecutionTime,
-                ExerciseExecutions = command.ExerciseExecutions
-                    .Select(x=> new ExerciseExecution {
+                WorkoutVersions = new List<WorkoutVersion>{new WorkoutVersion {
+                    FatigueLevelId = (int)command.FatigueLevel,
+                    MoodLevelId = (int)command.MoodLevel,
+                    Executed = command.ExecutionTime,
+                    ExerciseExecutions = command.ExerciseExecutions
+                    .Select(x => new ExerciseExecution
+                    {
                         Order = x.Order,
                         AdditionalKgs = x.AdditionalKgs,
                         Break = x.Break,
@@ -37,7 +40,10 @@ namespace WorkoutManagingService.Domain.CommandHandler
                         Repetitions = x.Reps,
                         Series = x.Series
                     })
-                    .ToList()
+                    .ToList(),
+                    Created = DateTime.Now
+                }
+                }
             }, token);
             await _context.SaveChangesAsync(token);
             return new Unit();

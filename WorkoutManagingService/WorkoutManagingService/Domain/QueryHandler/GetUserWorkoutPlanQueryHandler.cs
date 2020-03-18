@@ -22,14 +22,17 @@ namespace WorkoutManagingService.Domain.QueryHandler
         public Task<WorkoutPlanDTO> Handle(GetUserWorkoutPlanQuery query, CancellationToken cancellationToken)
         {
             return _context.WorkoutPlans
-                .Where(x => x.Id == query.WorkoutPlanId && (x.UserId == query.UserId || x.IsPublic))
+                .Where(x => 
+                    x.Id == query.WorkoutPlanName && 
+                    x.UserId == query.UserId &&
+                    x.DeactivationDate == null &&
+                    (x.UserId == query.RequesterId || x.IsPublic))
                 .Select(x => new WorkoutPlanDTO
                 {
-                    Id = x.Id,
                     Name = x.Name,
                     Created = x.Created,
                     Description = x.Description,
-                    Exercises = x.ExerciseExecutionPlans.Select(y => new ExercisePlanViewModel
+                    Exercises = x.WorkoutPlanVersions.OrderByDescending(x=>x.Created).First().ExerciseExecutionPlans.Select(y => new ExercisePlanViewModel
                     {
                         Series = y.Series,
                         MinReps = y.MinReps,

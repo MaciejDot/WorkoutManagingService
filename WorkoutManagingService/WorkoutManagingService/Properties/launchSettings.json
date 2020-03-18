@@ -16,7 +16,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SQLCONNSTR_WorkoutManagingService": "Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;",
-        "TokenServiceRSAAddress": "https://localhost:44344/RSAKey"
+        "TokenServiceRSAAddress": "https://localhost:44344/RSAKey",
+        "AccountsDataAddress": "https://localhost:44344/Account"
+      
       }
     },
     "WorkoutManagingService": {
@@ -27,7 +29,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SQLCONNSTR_WorkoutManagingService": "Server=(localdb)\\mssqllocaldb;Database=WorkoutManagingService;Trusted_Connection=True;",
-        "TokenServiceRSAAddress": "https://localhost:44344/RSAKey"
+        "TokenServiceRSAAddress": "https://localhost:44344/RSAKey",
+        "AccountsDataAddress": "https://localhost:44344/Account"
       }
     }
   }

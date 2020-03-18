@@ -20,13 +20,11 @@ namespace WorkoutManagingService.Domain.QueryHandler
         }
         public Task<List<WorkoutPlanThumbnailDTO>> Handle(GetUserWorkoutPlansQuery query, CancellationToken token)
         {
-            return _context.Users
-                .Where(x => x.Id == query.UserId)
-                .SelectMany(x => x.WorkoutPlans)
+            return _context.WorkoutPlans
+                .Where(x => x.DeactivationDate == null && x.UserId == query.UserId)
                 .Select(x => new WorkoutPlanThumbnailDTO {
                     Name = x.Name,
                     Description = x.Description,
-                    Id= x.Id,
                     Created = x.Created
                 })
                 .ToListAsync(token);

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using WorkoutManagingService.Domain.Command;
 
 namespace WorkoutManagingService.Domain.CommandHandler
 {
-    public class UpdateWorkoutCommandHandler :IRequestHandler<UpdateWorkoutCommand, Unit>
+    public class UpdateWorkoutCommandHandler : IRequestHandler<UpdateWorkoutCommand, Unit>
     {
         private readonly WorkoutManagingServiceContext _context;
 
@@ -21,14 +22,14 @@ namespace WorkoutManagingService.Domain.CommandHandler
 
         public async Task<Unit> Handle(UpdateWorkoutCommand command, CancellationToken token)
         {
-            _context.ExerciseExecutions.RemoveRange(_context.ExerciseExecutions.Where(x => x.WorkoutId == command.WorkoutId));
-            var workout = await _context.Workouts.FindAsync(new[] { command.WorkoutId }, token);
-            workout.Executed = command.ExecutionTime;
-            workout.FatigueLevelId = (int) command.FatigueLevel;
-            workout.MoodLevelId = (int) command.MoodLevel;
-            workout.Name = command.WorkoutName;
-            workout.Description = command.Description;
-            workout.ExerciseExecutions = command.ExerciseExecutions
+            var workoutId = (await _context.Workouts.FirstAsync(r => r.Name == command.WorkoutName && r.UserId == command.UserId && r.DeactivationDate == null)).Id;
+            await _context.WorkoutVersions.AddAsync(new WorkoutVersion
+            {
+                Created = DateTime.Now,
+                Executed = command.ExecutionTime,
+                FatigueLevelId = (int)command.FatigueLevel,
+                MoodLevelId = (int)command.MoodLevel,
+                ExerciseExecutions = command.ExerciseExecutions
                      .Select(x => new ExerciseExecution
                      {
                          Order = x.Order,
@@ -39,7 +40,8 @@ namespace WorkoutManagingService.Domain.CommandHandler
                          Repetitions = x.Reps,
                          AdditionalKgs = x.AdditionalKgs,
                      })
-                     .ToList();
+                     .ToList()
+            }, token);
             await _context.SaveChangesAsync(token);
             return new Unit();
         }

@@ -8,6 +8,6 @@ namespace WorkoutManagingService.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Workout> Workouts { get; set; }
+        public ICollection<WorkoutVersion> WorkoutVersions { get; set; }
     }
 }

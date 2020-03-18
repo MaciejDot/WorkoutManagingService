@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,11 @@ namespace WorkoutManagingService.Domain.CommandHandler
 
         public async Task<Unit> Handle(UpdateWorkoutPlanCommand command, CancellationToken token)
         {
-            _context.ExerciseExecutionPlans.RemoveRange(_context.ExerciseExecutionPlans.Where(x => x.WorkoutPlanId == command.WorkoutId));
-            var workout = await _context.WorkoutPlans.FindAsync(new[] { command.WorkoutId }, token);
-            workout.Name = command.Name;
-            workout.Description = command.Description;
-            workout.ExerciseExecutionPlans = command.Exercises
+            var workoutId = (await _context.WorkoutPlans.FirstAsync(r => r.Name == command.WorkoutName && r.UserId == command.UserId && r.DeactivationDate == null)).Id;
+            await _context.WorkoutPlanVersions.AddAsync(new WorkoutPlanVersion
+            {
+                Created = DateTime.Now,
+                ExerciseExecutionPlans = command.Exercises
                      .Select(x => new ExerciseExecutionPlan
                      {
                          Order = x.Order,
@@ -38,7 +39,8 @@ namespace WorkoutManagingService.Domain.CommandHandler
                          MaxReps = x.MaxReps,
                          MinReps = x.MinReps
                      })
-                     .ToList();
+                     .ToList()
+            }, token);
             await _context.SaveChangesAsync(token);
             return new Unit();
         }

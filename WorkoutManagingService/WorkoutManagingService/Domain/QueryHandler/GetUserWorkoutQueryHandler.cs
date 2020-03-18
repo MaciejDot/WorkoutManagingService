@@ -21,17 +21,18 @@ namespace WorkoutManagingService.Domain.QueryHandler
         public Task<WorkoutDTO> Handle(GetUserWorkoutQuery query, CancellationToken token)
         {
             return _context.Workouts
-                .Where(x => x.Id == query.WorkoutId &&
-                    (x.UserId == query.UserId || x.IsPublic))
+                .Where(x => x.DeactivationDate == null &&
+                    x.Name == query.WorkoutName &&
+                    x.UserId == query.UserId && 
+                    (x.IsPublic || x.UserId == query.RequesterId))
                 .Select(x => new WorkoutDTO
                 {
-                    Id = x.Id,
-                    Mood = x.MoodLevelId,
-                    Fatigue = x.FatigueLevelId,
+                    Mood = (int) x.WorkoutVersions.OrderByDescending(r=>r.Created).First().MoodLevelId,
+                    Fatigue = (int) x.WorkoutVersions.OrderByDescending(r => r.Created).First().FatigueLevelId,
                     Name = x.Name,
                     Description = x.Description,
-                    DateOfWorkout = x.Executed,
-                    Exercises = x.ExerciseExecutions
+                    DateOfWorkout = x.WorkoutVersions.OrderByDescending(r => r.Created).First().Executed,
+                    Exercises = x.WorkoutVersions.OrderByDescending(r => r.Created).First().ExerciseExecutions
                     .Select(x => new SendExerciseExecutionDTO
                     {
                         AdditionalKgs = x.AdditionalKgs,

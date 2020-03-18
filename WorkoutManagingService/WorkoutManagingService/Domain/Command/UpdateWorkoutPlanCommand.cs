@@ -9,9 +9,8 @@ namespace WorkoutManagingService.Domain.Command
 {
     public class UpdateWorkoutPlanCommand : IRequest<Unit>
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int WorkoutId { get; set; }
+        public string WorkoutName { get; set; }
+        public string UserId { get; set; }
         public IEnumerable<ExercisePlanModel> Exercises { get; set; }
     }
 }

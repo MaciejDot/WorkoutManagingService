@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace WorkoutManagingService.Domain.CommandHandler
         }
         public async Task<Unit> Handle(DeleteWorkoutPlanCommand command, CancellationToken cancellationToken)
         {
-            _context.ExerciseExecutionPlans.RemoveRange(_context.ExerciseExecutionPlans.Where(x => x.WorkoutPlanId == command.WorkoutId));
-            _context.WorkoutPlans.RemoveRange(_context.WorkoutPlans.Where(x => x.Id == command.WorkoutId));
+            var workout = await _context.WorkoutPlans.FirstAsync(w => w.UserId == command.UserId && w.Name == command.WorkoutName && w.DeactivationDate == null, cancellationToken);
+            workout.DeactivationDate = DateTime.Now; 
             await _context.SaveChangesAsync(cancellationToken);
             return new Unit();
         }

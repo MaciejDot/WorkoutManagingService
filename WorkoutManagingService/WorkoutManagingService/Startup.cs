@@ -21,6 +21,7 @@ using System.Reflection;
 using WorkoutManagingService.Configuration;
 using Microsoft.OpenApi.Models;
 using WorkoutManagingService.Configuration.ServiceCollectionExtensions;
+using WorkoutManagingService.Configuration.UsersStartUpConfiguration;
 
 namespace WorkoutManagingService
 {
@@ -60,6 +61,12 @@ namespace WorkoutManagingService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var userStartUp = new UsersStartUp(
+                new RestClient(),
+                new WorkoutManagingServiceContext(new DbContextOptionsBuilder<WorkoutManagingServiceContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("WorkoutManagingService")).Options));
+            var users = userStartUp.DownloadUsers(Configuration.GetValue<string>("AccountsDataAddress"));
+            userStartUp.SaveUsers(users).Wait();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
