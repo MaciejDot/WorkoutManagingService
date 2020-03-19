@@ -21,6 +21,7 @@ namespace WorkoutManagingService.Domain.CommandHandler
         {
             await _context.Workouts.AddAsync(new Workout
             {
+                Id = Guid.NewGuid().ToString(),
                 UserId = command.UserId,
                 Name = command.WorkoutName,
                 Created = command.CreatedTime,

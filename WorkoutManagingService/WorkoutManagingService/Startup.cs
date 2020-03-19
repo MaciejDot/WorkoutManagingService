@@ -52,6 +52,7 @@ namespace WorkoutManagingService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+                //should ??
             services.ConfigureJWTTokenAuthorization(Configuration.GetValue<string>("TokenServiceRSAAddress"));
             services.AddSwaggerGen(c =>
             {
@@ -61,12 +62,14 @@ namespace WorkoutManagingService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // should be job and it should be in nuget packages ??
             var userStartUp = new UsersStartUp(
                 new RestClient(),
                 new WorkoutManagingServiceContext(new DbContextOptionsBuilder<WorkoutManagingServiceContext>()
                     .UseSqlServer(Configuration.GetConnectionString("WorkoutManagingService")).Options));
             var users = userStartUp.DownloadUsers(Configuration.GetValue<string>("AccountsDataAddress"));
             userStartUp.SaveUsers(users).Wait();
+            //
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

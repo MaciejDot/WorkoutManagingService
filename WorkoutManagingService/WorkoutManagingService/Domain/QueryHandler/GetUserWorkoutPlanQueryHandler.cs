@@ -24,7 +24,7 @@ namespace WorkoutManagingService.Domain.QueryHandler
             return _context.WorkoutPlans
                 .Where(x => 
                     x.Id == query.WorkoutPlanName && 
-                    x.UserId == query.UserId &&
+                    x.User.Username == query.Username &&
                     x.DeactivationDate == null &&
                     (x.UserId == query.RequesterId || x.IsPublic))
                 .Select(x => new WorkoutPlanDTO

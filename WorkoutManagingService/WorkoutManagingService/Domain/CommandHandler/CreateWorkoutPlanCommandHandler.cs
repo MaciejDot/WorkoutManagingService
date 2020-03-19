@@ -24,6 +24,7 @@ namespace WorkoutManagingService.Domain.CommandHandler
             await _context.WorkoutPlans
                 .AddAsync(new WorkoutPlan
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserId = command.UserId,
                     User = _context.Users.Find(command.UserId),
                     Created = DateTime.Now,

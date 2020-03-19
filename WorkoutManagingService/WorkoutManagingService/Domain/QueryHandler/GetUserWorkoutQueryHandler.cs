@@ -23,7 +23,7 @@ namespace WorkoutManagingService.Domain.QueryHandler
             return _context.Workouts
                 .Where(x => x.DeactivationDate == null &&
                     x.Name == query.WorkoutName &&
-                    x.UserId == query.UserId && 
+                    x.User.Username == query.Username && 
                     (x.IsPublic || x.UserId == query.RequesterId))
                 .Select(x => new WorkoutDTO
                 {

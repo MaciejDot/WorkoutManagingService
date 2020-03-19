@@ -123,7 +123,7 @@ namespace WorkoutManagingService.Data
                 entity.ToTable("WorkoutVersion", "Workout");
 
                 entity.HasKey(r => r.Id)
-                    .HasName("PK_WorkoutPlanVersion");
+                    .HasName("PK_WorkoutVersion");
 
                 entity.Property(r => r.WorkoutId)
                     .HasMaxLength(100);

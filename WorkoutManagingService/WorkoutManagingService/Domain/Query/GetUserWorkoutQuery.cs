@@ -9,7 +9,7 @@ namespace WorkoutManagingService.Domain.Query
 {
     public class GetUserWorkoutQuery : IRequest<WorkoutDTO>
     {
-        public string UserId { get; set; }
+        public string Username { get; set; }
         public string WorkoutName { get; set; }
         public string RequesterId { get; set; }
     }

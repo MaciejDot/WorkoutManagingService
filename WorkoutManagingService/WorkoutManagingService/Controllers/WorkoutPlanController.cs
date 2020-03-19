@@ -31,16 +31,16 @@ namespace WorkoutManagingService.Controllers
             return await _mediator.Send(new GetUserWorkoutPlansQuery { UserId = User.Claims.Single(x => x.Type == "Id").Value }, token);
         }
 
-        [HttpGet("{userId}/{workoutName}")]
-        [Authorize]
-        public async Task<ActionResult<WorkoutPlanDTO>> Get(string userId, string workoutName, CancellationToken token)
+        [HttpGet("{username}/{workoutName}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<WorkoutPlanDTO>> Get(string username, string workoutName, CancellationToken token)
         {
             try
             {
                 return await _mediator.Send(new GetUserWorkoutPlanQuery
                 {
-                    RequesterId = User.Claims.Single(x => x.Type == "Id").Value,
-                    UserId = userId,
+                    RequesterId = User?.Claims?.FirstOrDefault(x => x.Type == "Id")?.Value,
+                    Username = username,
                     WorkoutPlanName = workoutName
                 }, token);
             }
